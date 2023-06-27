@@ -7,9 +7,9 @@ from config.std_config import *
 from src.masked_minimizer import *
 
 seed(2603, 2603)
-w, k = [10, 15, 20], [10, 15]
+w, k = [15, 20], [10, 15]
 seq = f'chrXC'
-try_mask = 'cms'
+try_mask = 'opt'
 loss_wrapper = {
     'hbd': HbdLossWrapper,
     'den': DenLossWrapper,
@@ -19,7 +19,8 @@ for wval in w:
     mask = {
         'ops': ops_mask(wval, wval//2),
         'mnz': mnz_mask(wval),
-        'cms': cms_mask(wval, wval//2)
+        'cms': cms_mask(wval, wval//2),
+        'opt': opt_mask,
     }
     for kval in k:
         for lw in loss_wrapper.keys():
@@ -37,3 +38,5 @@ for wval in w:
                 n_epochs=501,
                 eval_interval=100
             )
+            if try_mask == 'opt':
+                print(minimizer.mask)
